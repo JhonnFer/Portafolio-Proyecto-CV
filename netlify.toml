@@ -2,7 +2,11 @@
   command = "npm run build"
   publish = "dist"
 
-# Redirige todas las rutas al index correcto (necesario para /admin/)
+[[redirects]]
+  from = "/admin/login"
+  to   = "/admin/login.html"
+  status = 200
+
 [[redirects]]
   from = "/admin/*"
   to   = "/admin/index.html"

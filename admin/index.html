@@ -10,6 +10,9 @@
 </head>
 <body class="admin-body">
 
+  <!-- Panel oculto hasta verificar sesión -->
+  <div id="admin-wrapper" style="display:none;width:100%;min-height:100vh">
+
   <!-- SIDEBAR -->
   <aside class="admin-sidebar">
     <div class="admin-logo">&lt;Admin /&gt;</div>
@@ -22,6 +25,7 @@
       <a href="#section-skills"       class="admin-nav-item"        data-section="skills">⚡ Skills</a>
     </nav>
     <a href="/" class="admin-nav-item" style="margin-top:auto;opacity:.6">← Ver portafolio</a>
+    <button id="btn-logout" class="admin-nav-item" style="color:#f87171;border:none;cursor:pointer;text-align:left">⎋ Cerrar sesión</button>
   </aside>
 
   <!-- MAIN CONTENT -->
@@ -189,6 +193,24 @@
     </section>
 
   </main>
+
+  </div><!-- /admin-wrapper -->
+
+  <script type="module">
+    // ── Protección del panel ──────────────────────
+    // Si no hay sesión activa, redirige al login
+    import supabase from '../src/services/supabase.js'
+
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      window.location.href = '/admin/login.html'
+    }
+
+    // Escucha cambios de sesión (ej: token expirado)
+    supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') window.location.href = '/admin/login.html'
+    })
+  </script>
 
   <script type="module" src="../assets/js/admin.js"></script>
 </body>

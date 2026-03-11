@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
-  // Resuelve rutas relativas desde la raíz del proyecto
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -13,6 +12,7 @@ export default defineConfig({
       input: {
         main:  resolve(__dirname, 'index.html'),
         admin: resolve(__dirname, 'admin/index.html'),
+        login: resolve(__dirname, 'admin/login.html'),
       },
     },
   },
