@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portafolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body>
+
+  <!-- GLOWS -->
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">&lt;MP /&gt;</a>
+    <ul class="nav-links">
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#cv">CV</a></li>
+      <li><a href="#contact" class="nav-cta">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══ HERO ══════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-tag">✦ Disponible para oportunidades</div>
+        <h1>Hola, soy<br /><span id="hero-name">Cargando…</span></h1>
+        <p class="hero-desc" id="hero-bio"></p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn btn-primary">Ver proyectos →</a>
+          <a href="#" id="btn-download-cv" class="btn btn-outline" download style="display:none">⬇ Descargar CV</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num" id="counter-projects">0</div><div class="stat-label">Proyectos</div></div>
+          <div class="stat"><div class="stat-num" id="counter-skills">0</div><div class="stat-label">Tecnologías</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orbit orbit-1"><div class="orbit-dot"></div></div>
+        <div class="orbit orbit-2"><div class="orbit-dot"></div></div>
+        <div class="avatar-frame">
+          <div class="avatar-inner" id="hero-avatar">
+            <span style="font-size:7rem">👨‍💻</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SKILLS ════════════════════════════════ -->
+  <section id="skills">
+    <div class="section-inner">
+      <p class="section-label reveal">Habilidades técnicas</p>
+      <h2 class="section-title reveal">Tecnologías que <span>domino</span></h2>
+      <div class="skills-grid" id="skills-grid">
+        <div class="skill-chip skeleton"></div>
+        <div class="skill-chip skeleton"></div>
+        <div class="skill-chip skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROJECTS ═══════════════════════════════ -->
+  <section id="projects">
+    <div class="section-inner">
+      <p class="section-label reveal">Portafolio universitario</p>
+      <h2 class="section-title reveal">Mis <span>proyectos</span></h2>
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="frontend">Frontend</button>
+        <button class="filter-btn" data-filter="backend">Backend</button>
+        <button class="filter-btn" data-filter="mobile">Mobile</button>
+        <button class="filter-btn" data-filter="data">Data</button>
+      </div>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ══ CV ═════════════════════════════════════ -->
+  <section id="cv">
+    <div class="section-inner">
+      <p class="section-label reveal">Currículum Vitae</p>
+      <h2 class="section-title reveal">Mi trayectoria <span>académica</span></h2>
+      <div class="cv-layout">
+        <div class="cv-sidebar">
+          <div class="cv-info-card reveal">
+            <h4>Información Personal</h4>
+            <div class="cv-contact-item"><span>👤</span> <span id="cv-name">—</span></div>
+            <div class="cv-contact-item"><span>📍</span> <span id="cv-location">—</span></div>
+            <div class="cv-contact-item"><span>📧</span> <a id="cv-email" href="#">—</a></div>
+            <div class="cv-contact-item"><span>📱</span> <a id="cv-phone" href="#">—</a></div>
+            <div class="cv-contact-item"><span>🐙</span> <a id="link-github" href="#" target="_blank">GitHub</a></div>
+            <div class="cv-contact-item"><span>💼</span> <a id="link-linkedin" href="#" target="_blank">LinkedIn</a></div>
+          </div>
+        </div>
+        <div class="cv-main">
+          <div class="timeline-section">
+            <h3>📚 Educación</h3>
+            <div id="timeline-education"></div>
+          </div>
+          <div class="timeline-section">
+            <h3>💼 Experiencia</h3>
+            <div id="timeline-experience"></div>
+          </div>
+          <div class="timeline-section">
+            <h3>🏆 Certificaciones</h3>
+            <div id="timeline-certifications"></div>
+          </div>
+          <div class="cv-download-section">
+            <h3>📄 Descargar CV completo</h3>
+            <p>Versión PDF con toda mi información académica y profesional.</p>
+            <a id="btn-cv-pdf" href="#" class="btn btn-primary" download>⬇ Descargar CV en PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ════════════════════════════════ -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-label reveal">Hablemos</p>
+      <h2 class="section-title reveal">¿Tienes un proyecto <span>en mente?</span></h2>
+      <div class="contact-grid">
+        <form class="contact-form reveal" id="contact-form">
+          <div class="form-group"><label>Nombre</label><input type="text" placeholder="Tu nombre" required /></div>
+          <div class="form-group"><label>Email</label><input type="email" placeholder="tu@email.com" required /></div>
+          <div class="form-group"><label>Mensaje</label><textarea rows="5" placeholder="Cuéntame sobre tu proyecto…" required></textarea></div>
+          <div class="form-status" id="form-status"></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Enviar mensaje →</button>
+        </form>
+        <div class="contact-info reveal">
+          <h3>Conectemos 🤝</h3>
+          <p>Abierto a prácticas, proyectos freelance y colaboraciones.</p>
+          <div class="social-links">
+            <a id="social-github"   href="#" target="_blank" class="social-link"><span>🐙</span><span>GitHub</span></a>
+            <a id="social-linkedin" href="#" target="_blank" class="social-link"><span>💼</span><span>LinkedIn</span></a>
+            <a id="social-email"    href="#"                 class="social-link"><span>📧</span><span>Email</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 <span id="footer-name">M. Paredes</span> · Hecho con ❤️ · Quito, Ecuador</p>
+  </footer>
+
+  <!-- Entry point de Vite -->
+  <script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>
