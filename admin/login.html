@@ -141,36 +141,35 @@
   </div>
 
   <script type="module">
-    import supabase from '../src/services/supabase.js'
+    import { AuthService } from '../src/services/auth.js'
 
-    // Si ya hay sesión activa, redirige directo al panel
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) window.location.href = '/admin/'
+    ;(async () => {
+      // Si ya hay sesión activa, redirige directo al panel
+      const session = await AuthService.getSession()
+      if (session) { window.location.href = '/admin/'; return }
+    })()
 
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault()
 
-      const email    = document.getElementById('email').value.trim()
-      const password = document.getElementById('password').value
-      const btn      = document.getElementById('btn-login')
+      const email    = document.getElementById('input-email').value.trim()
+      const password = document.getElementById('input-password').value
+      const btn      = document.getElementById('btn-submit')
       const errorEl  = document.getElementById('error-msg')
 
       btn.textContent = 'Ingresando...'
       btn.disabled    = true
       errorEl.classList.remove('show')
 
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-
-      if (error) {
-        errorEl.textContent = 'Email o contraseña incorrectos.'
+      try {
+        await AuthService.login(email, password)
+        window.location.href = '/admin/'
+      } catch (err) {
+        errorEl.textContent = '❌ Email o contraseña incorrectos'
         errorEl.classList.add('show')
         btn.textContent = 'Ingresar →'
         btn.disabled    = false
-        return
       }
-
-      // Login exitoso → va al panel
-      window.location.href = '/admin/'
     })
   </script>
 </body>

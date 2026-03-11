@@ -8,6 +8,8 @@ export default defineConfig({
     },
   },
   build: {
+    // ES2022 soporta top-level await y es compatible con todos los browsers modernos
+    target: 'es2022',
     rollupOptions: {
       input: {
         main:  resolve(__dirname, 'index.html'),
