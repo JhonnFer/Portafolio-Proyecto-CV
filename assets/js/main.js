@@ -4,19 +4,19 @@
 // Orquesta la carga de todos los controllers
 // y conecta con las funciones de cada View.
 // ─────────────────────────────────────────────
-import { ProfileController }  from '/src/controllers/profileController.js'
-import { ProjectsController } from '/src/controllers/projectsController.js'
+import { ProfileController }  from '../../src/controllers/profileController.js'
+import { ProjectsController } from '../../src/controllers/projectsController.js'
 import {
   EducationController,
   ExperienceController,
   CertificationsController,
   SkillsController,
-} from '/src/controllers/cvController.js'
+} from '../../src/controllers/cvController.js'
 
-import { renderHero }                                   from '/src/views/components/Hero.js'
-import { renderProjects, setupProjectFilters }          from '/src/views/components/ProjectCard.js'
+import { renderHero }                                   from '../../src/views/components/Hero.js'
+import { renderProjects, setupProjectFilters }          from '../../src/views/components/ProjectCard.js'
 import { renderEducation, renderExperience,
-         renderCertifications, renderSkills }           from '/src/views/components/Timeline.js'
+         renderCertifications, renderSkills }           from '../../src/views/components/Timeline.js'
 
 // ── Cursor animado ────────────────────────────
 const cursor = document.getElementById('cursor')
