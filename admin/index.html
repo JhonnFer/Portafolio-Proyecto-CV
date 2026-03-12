@@ -196,22 +196,6 @@
 
   </div><!-- /admin-wrapper -->
 
-  <script type="module">
-    // ── Protección del panel ──────────────────────
-    // Si no hay sesión activa, redirige al login
-    import supabase from '../src/services/supabase.js'
-
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      window.location.href = '/admin/login.html'
-    }
-
-    // Escucha cambios de sesión (ej: token expirado)
-    supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_OUT') window.location.href = '/admin/login.html'
-    })
-  </script>
-
   <script type="module" src="../assets/js/admin.js"></script>
 </body>
 </html>
