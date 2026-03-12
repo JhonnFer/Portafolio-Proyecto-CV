@@ -1,3 +1,13 @@
+/* Wrapper oculto hasta verificar sesión */
+.admin-wrapper-hidden {
+  display: none;
+}
+.admin-wrapper-hidden.visible {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
 /* assets/css/admin.css */
 /* ─────────────────────────────────────────────
    Estilos del panel de administración
