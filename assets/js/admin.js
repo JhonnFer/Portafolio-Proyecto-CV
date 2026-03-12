@@ -33,7 +33,6 @@ async function init() {
   // ── 4. Muestra el panel ───────────────────────
   const wrapper = document.getElementById('admin-wrapper')
   if (wrapper) {
-    wrapper.classList.remove('admin-wrapper-hidden')
     wrapper.classList.add('visible')
   }
 

@@ -1,11 +1,11 @@
 /* Wrapper oculto hasta verificar sesión */
-.admin-wrapper-hidden {
+#admin-wrapper {
   display: none;
-}
-.admin-wrapper-hidden.visible {
-  display: flex;
   width: 100%;
   min-height: 100vh;
+}
+#admin-wrapper.visible {
+  display: flex;
 }
 
 /* assets/css/admin.css */
