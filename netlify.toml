@@ -2,17 +2,27 @@
   command = "npm run build"
   publish = "dist"
 
+# ── Headers anti-caché para páginas del admin ──
+# Impide que el navegador o CDN cachee el HTML del admin
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate"
+    Pragma        = "no-cache"
+    Expires       = "0"
+
+# ── Redirects ──────────────────────────────────
 [[redirects]]
-  from = "/admin/login"
-  to   = "/admin/login.html"
+  from   = "/admin/login"
+  to     = "/admin/login.html"
   status = 200
 
 [[redirects]]
-  from = "/admin/*"
-  to   = "/admin/index.html"
+  from   = "/admin/*"
+  to     = "/admin/index.html"
   status = 200
 
 [[redirects]]
-  from = "/*"
-  to   = "/index.html"
+  from   = "/*"
+  to     = "/index.html"
   status = 200
