@@ -49,7 +49,7 @@ async function init() {
   initAdminCv()
 
   // ── 7. Navegación entre secciones ────────────
-  const navItems = document.querySelectorAll('.admin-nav-item[data-section]')
+  const navItems = document.querySelectorAll('.nav-item[data-section]')
   const sections = document.querySelectorAll('.admin-section')
 
   navItems.forEach(item => {

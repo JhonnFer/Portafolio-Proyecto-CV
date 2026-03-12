@@ -5,197 +5,452 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — Portafolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/main.css" />
-  <link rel="stylesheet" href="../assets/css/admin.css" />
-</head>
-<body class="admin-body">
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --bg: #080c10; --surface: #0f1520; --surface2: #161e2e;
+      --border: rgba(255,255,255,0.07); --accent: #00e5ff;
+      --text: #e8edf5; --muted: #7a8799; --radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <!-- Panel oculto hasta verificar sesión -->
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ── WRAPPER — oculto hasta verificar sesión ── */
+    #admin-wrapper {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+    }
+    #admin-wrapper.visible {
+      display: flex;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 0.75rem;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      color: var(--accent);
+      padding: 0 0.5rem;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.65rem 0.9rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: 'Syne', sans-serif;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .nav-item:hover  { color: var(--text); background: var(--surface2); }
+    .nav-item.active { color: var(--accent); background: rgba(0,229,255,0.08); border-left: 3px solid var(--accent); padding-left: calc(0.9rem - 3px); }
+
+    .sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+      margin-top: 0.75rem;
+    }
+
+    /* ── MAIN ── */
+    .admin-main {
+      flex: 1;
+      min-width: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 2rem 2.5rem;
+      background: var(--bg);
+    }
+
+    /* ── SECCIONES ── */
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header h2 { font-size: 1.5rem; font-weight: 800; }
+
+    /* ── CARD ── */
+    .admin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── FORMS ── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group label { font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+      width: 100%;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--accent); }
+    .form-actions { margin-top: 1rem; display: flex; gap: 0.75rem; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: var(--bg); }
+    .btn-primary:hover { background: #00b8d4; transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── AVATAR ── */
+    .avatar-upload-area {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-bottom: 1.5rem; padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── TABLE ── */
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .admin-table th {
+      text-align: left; padding: 0.75rem 1rem;
+      font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); font-family: 'Space Mono', monospace;
+      border-bottom: 1px solid var(--border); background: var(--surface2);
+    }
+    .admin-table td {
+      padding: 0.85rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--text); vertical-align: middle;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .actions-cell { display: flex; gap: 0.5rem; }
+    .btn-icon {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); border-radius: 6px; padding: 0.35rem 0.6rem;
+      cursor: pointer; font-size: 1rem; transition: all 0.2s; font-family: 'Syne', sans-serif;
+    }
+    .btn-icon.btn-delete:hover { background: rgba(248,113,113,.15); border-color: #f87171; }
+    .btn-icon.btn-edit:hover   { background: rgba(0,229,255,.1); border-color: var(--accent); }
+
+    /* ── BADGE ── */
+    .badge { font-family:'Space Mono',monospace; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; padding:.25rem .65rem; border-radius:20px; }
+    .badge-frontend { background:rgba(0,229,255,.15); color:var(--accent); border:1px solid rgba(0,229,255,.3); }
+    .badge-backend  { background:rgba(124,58,237,.15); color:#a78bfa; border:1px solid rgba(124,58,237,.3); }
+    .badge-mobile   { background:rgba(251,146,60,.15); color:#fb923c; border:1px solid rgba(251,146,60,.3); }
+    .badge-data     { background:rgba(34,197,94,.15); color:#4ade80; border:1px solid rgba(34,197,94,.3); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; z-index: 200;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem;
+      width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .modal-header h3 { font-size: 1.2rem; font-weight: 700; }
+    .modal-close {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+      border-radius: 6px; padding: 0.3rem 0.7rem; cursor: pointer; font-size: 1rem; transition: all 0.2s;
+    }
+    .modal-close:hover { color: var(--text); border-color: var(--text); }
+
+    /* ── CV ADMIN LIST ── */
+    .cv-admin-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .cv-admin-card {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.25rem; background: var(--surface2);
+      border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s;
+    }
+    .cv-admin-card:hover { border-color: rgba(0,229,255,0.2); }
+    .cv-admin-card__info { display: flex; flex-direction: column; gap: 0.25rem; }
+    .cv-admin-card__info strong { font-size: 0.95rem; }
+    .cv-admin-card__info span  { font-size: 0.8rem; color: var(--accent); }
+    .cv-admin-card__info small { font-size: 0.75rem; color: var(--muted); }
+    .cv-admin-card__actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+
+    /* ── INLINE FORM ── */
+    .inline-form {
+      background: var(--surface2); border: 1px solid var(--accent);
+      border-radius: 10px; padding: 1.25rem; margin-bottom: 0.75rem;
+    }
+    .inline-form__actions { display: flex; gap: 0.75rem; margin-top: 1rem; }
+    .empty-msg { color: var(--muted); font-size: 0.88rem; padding: 1.5rem 0; text-align: center; }
+
+    /* ── TOAST ── */
+    .admin-toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      padding: 0.85rem 1.5rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 600; z-index: 9999;
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.3s ease; pointer-events: none;
+    }
+    .admin-toast--show    { opacity: 1; transform: translateY(0); }
+    .admin-toast--success { background: rgba(74,222,128,.15); border: 1px solid rgba(74,222,128,.4); color: #4ade80; }
+    .admin-toast--error   { background: rgba(248,113,113,.15); border: 1px solid rgba(248,113,113,.4); color: #f87171; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .sidebar { width: 180px; min-width: 180px; }
+      .form-row { grid-template-columns: 1fr; }
+      .admin-main { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
   <div id="admin-wrapper">
 
-  <!-- SIDEBAR -->
-  <aside class="admin-sidebar">
-    <div class="admin-logo">&lt;Admin /&gt;</div>
-    <nav class="admin-nav">
-      <a href="#section-profile"      class="admin-nav-item active" data-section="profile">👤 Perfil</a>
-      <a href="#section-projects"     class="admin-nav-item"        data-section="projects">💻 Proyectos</a>
-      <a href="#section-education"    class="admin-nav-item"        data-section="education">📚 Educación</a>
-      <a href="#section-experience"   class="admin-nav-item"        data-section="experience">💼 Experiencia</a>
-      <a href="#section-certs"        class="admin-nav-item"        data-section="certifications">🏆 Certificaciones</a>
-      <a href="#section-skills"       class="admin-nav-item"        data-section="skills">⚡ Skills</a>
-    </nav>
-    <div class="admin-nav-bottom">
-      <a href="/" class="admin-nav-item">← Ver portafolio</a>
-      <button id="btn-logout" class="admin-nav-item" style="color:#f87171">⎋ Cerrar sesión</button>
-    </div>
-  </aside>
+    <!-- ══ SIDEBAR ══════════════════════════════ -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">&lt;Admin /&gt;</div>
 
-  <!-- MAIN CONTENT -->
-  <main class="admin-main">
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-section="profile">👤 Perfil</a>
+        <a class="nav-item" data-section="projects">💻 Proyectos</a>
+        <a class="nav-item" data-section="education">📚 Educación</a>
+        <a class="nav-item" data-section="experience">💼 Experiencia</a>
+        <a class="nav-item" data-section="certifications">🏆 Certificaciones</a>
+        <a class="nav-item" data-section="skills">⚡ Skills</a>
+      </nav>
 
-    <!-- ── PERFIL ── -->
-    <section id="section-profile" class="admin-section active">
-      <div class="admin-section-header">
-        <h2>Perfil</h2>
-        <p class="section-desc">Tu información personal que aparece en el portafolio.</p>
+      <div class="sidebar-footer">
+        <a href="/" class="nav-item">← Ver portafolio</a>
+        <button id="btn-logout" class="nav-item" style="color:#f87171">⎋ Cerrar sesión</button>
       </div>
+    </aside>
 
-      <div class="admin-card">
-        <div class="avatar-upload-area">
-          <img id="avatar-preview" src="" alt="Avatar" style="display:none;width:120px;height:120px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)" />
-          <div>
-            <p style="font-weight:600;margin-bottom:.5rem">Foto de perfil</p>
-            <label class="btn btn-outline" style="cursor:pointer">
-              📷 Cambiar foto
-              <input type="file" id="input-avatar" accept="image/*" hidden />
-            </label>
-          </div>
+    <!-- ══ MAIN ══════════════════════════════════ -->
+    <main class="admin-main">
+
+      <!-- ── PERFIL ── -->
+      <section id="section-profile" class="admin-section active">
+        <div class="section-header">
+          <h2>👤 Perfil</h2>
         </div>
-
-        <form id="form-profile">
-          <div class="form-row">
-            <div class="form-group"><label>Nombre completo</label><input type="text" name="name" required /></div>
-            <div class="form-group"><label>Título profesional</label><input type="text" name="title" placeholder="Ej: Desarrollador Web Full Stack" /></div>
-          </div>
-          <div class="form-group"><label>Biografía / Descripción</label><textarea name="bio" rows="4"></textarea></div>
-          <div class="form-row">
-            <div class="form-group"><label>Email</label><input type="email" name="email" /></div>
-            <div class="form-group"><label>Teléfono</label><input type="text" name="phone" /></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Ubicación</label><input type="text" name="location" /></div>
-            <div class="form-group"><label>GitHub URL</label><input type="url" name="github_url" /></div>
-          </div>
-          <div class="form-group"><label>LinkedIn URL</label><input type="url" name="linkedin_url" /></div>
-
-          <div class="form-group" style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:.5rem">
-            <label>CV en PDF</label>
-            <div style="display:flex;align-items:center;gap:1rem">
+        <div class="admin-card">
+          <div class="avatar-upload-area">
+            <img id="avatar-preview" src="" alt="Avatar"
+              style="display:none;width:100px;height:100px;border-radius:50%;object-fit:cover;border:2px solid var(--accent)" />
+            <div>
+              <p style="font-weight:600;margin-bottom:.5rem">Foto de perfil</p>
               <label class="btn btn-outline" style="cursor:pointer">
-                📄 Subir PDF
-                <input type="file" id="input-cv-pdf" accept="application/pdf" hidden />
+                📷 Cambiar foto
+                <input type="file" id="input-avatar" accept="image/*" hidden />
               </label>
-              <span id="cv-pdf-status" style="font-size:.82rem;color:var(--muted)">Sin archivo</span>
             </div>
           </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- ── PROYECTOS ── -->
-    <section id="section-projects" class="admin-section">
-      <div class="admin-section-header">
-        <h2>Proyectos</h2>
-        <button class="btn btn-primary" id="btn-new-project">+ Nuevo proyecto</button>
-      </div>
-
-      <div class="admin-card" style="padding:0;overflow:hidden">
-        <table class="admin-table">
-          <thead>
-            <tr><th>Proyecto</th><th>Categoría</th><th>Stack</th><th>Destacado</th><th>Acciones</th></tr>
-          </thead>
-          <tbody id="projects-tbody">
-            <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Cargando…</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Modal crear/editar proyecto -->
-      <div id="project-modal" class="modal-overlay">
-        <div class="modal">
-          <div class="modal-header">
-            <h3 id="modal-title">Nuevo proyecto</h3>
-            <button id="modal-close" class="modal-close">✕</button>
-          </div>
-          <form id="form-project">
-            <input type="hidden" id="project-id" />
+          <form id="form-profile">
             <div class="form-row">
-              <div class="form-group"><label>Título *</label><input type="text" name="title" required /></div>
-              <div class="form-group">
-                <label>Categoría</label>
-                <select name="category">
-                  <option value="frontend">Frontend</option>
-                  <option value="backend">Backend</option>
-                  <option value="mobile">Mobile</option>
-                  <option value="data">Data</option>
-                </select>
+              <div class="form-group"><label>Nombre completo</label><input type="text" name="name" required /></div>
+              <div class="form-group"><label>Título profesional</label><input type="text" name="title" placeholder="Ej: Desarrollador Web Full Stack" /></div>
+            </div>
+            <div class="form-group"><label>Biografía / Descripción</label><textarea name="bio" rows="4"></textarea></div>
+            <div class="form-row">
+              <div class="form-group"><label>Email</label><input type="email" name="email" /></div>
+              <div class="form-group"><label>Teléfono</label><input type="text" name="phone" /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Ubicación</label><input type="text" name="location" /></div>
+              <div class="form-group"><label>GitHub URL</label><input type="url" name="github_url" /></div>
+            </div>
+            <div class="form-group"><label>LinkedIn URL</label><input type="url" name="linkedin_url" /></div>
+            <div class="form-group" style="border-top:1px solid var(--border);padding-top:1.25rem;margin-top:.5rem">
+              <label>CV en PDF</label>
+              <div style="display:flex;align-items:center;gap:1rem;margin-top:.4rem">
+                <label class="btn btn-outline" style="cursor:pointer">
+                  📄 Subir PDF
+                  <input type="file" id="input-cv-pdf" accept="application/pdf" hidden />
+                </label>
+                <span id="cv-pdf-status" style="font-size:.82rem;color:var(--muted)">Sin archivo subido</span>
               </div>
             </div>
-            <div class="form-group"><label>Descripción</label><textarea name="description" rows="3"></textarea></div>
-            <div class="form-row">
-              <div class="form-group"><label>Emoji 😄</label><input type="text" name="emoji" maxlength="4" /></div>
-              <div class="form-group"><label>Stack (separado por comas)</label><input type="text" name="stack" placeholder="React, Node.js, MySQL" /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group"><label>URL Repositorio</label><input type="url" name="repo_url" /></div>
-              <div class="form-group"><label>URL Demo</label><input type="url" name="demo_url" /></div>
-            </div>
-            <div class="form-group">
-              <label>Imagen de portada</label>
-              <input type="file" name="image" accept="image/*" />
-            </div>
-            <div class="form-group" style="flex-direction:row;align-items:center;gap:.75rem">
-              <input type="checkbox" name="featured" id="featured-check" />
-              <label for="featured-check" style="margin:0">Marcar como proyecto destacado ⭐</label>
-            </div>
             <div class="form-actions">
-              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
           </form>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ── EDUCACIÓN ── -->
-    <section id="section-education" class="admin-section">
-      <div class="admin-section-header">
-        <h2>Educación</h2>
-        <button class="btn btn-primary" id="btn-add-education">+ Agregar</button>
-      </div>
-      <div class="admin-card">
-        <div id="education-list" class="cv-admin-list"></div>
-      </div>
-    </section>
+      <!-- ── PROYECTOS ── -->
+      <section id="section-projects" class="admin-section">
+        <div class="section-header">
+          <h2>💻 Proyectos</h2>
+          <button class="btn btn-primary" id="btn-new-project">+ Nuevo proyecto</button>
+        </div>
+        <div class="admin-card" style="padding:0;overflow:hidden">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Proyecto</th><th>Categoría</th><th>Stack</th><th>Destacado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody id="projects-tbody">
+              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Cargando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Modal -->
+        <div id="project-modal" class="modal-overlay">
+          <div class="modal">
+            <div class="modal-header">
+              <h3 id="modal-title">Nuevo proyecto</h3>
+              <button id="modal-close" class="modal-close">✕</button>
+            </div>
+            <form id="form-project">
+              <input type="hidden" id="project-id" />
+              <div class="form-row">
+                <div class="form-group"><label>Título *</label><input type="text" name="title" required /></div>
+                <div class="form-group">
+                  <label>Categoría</label>
+                  <select name="category">
+                    <option value="frontend">Frontend</option>
+                    <option value="backend">Backend</option>
+                    <option value="mobile">Mobile</option>
+                    <option value="data">Data</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group"><label>Descripción</label><textarea name="description" rows="3"></textarea></div>
+              <div class="form-row">
+                <div class="form-group"><label>Emoji 😄</label><input type="text" name="emoji" maxlength="4" /></div>
+                <div class="form-group"><label>Stack (separado por comas)</label><input type="text" name="stack" placeholder="React, Node.js, MySQL" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>URL Repositorio</label><input type="url" name="repo_url" /></div>
+                <div class="form-group"><label>URL Demo</label><input type="url" name="demo_url" /></div>
+              </div>
+              <div class="form-group">
+                <label>Imagen de portada</label>
+                <input type="file" name="image" accept="image/*" />
+              </div>
+              <div class="form-group" style="flex-direction:row;align-items:center;gap:.75rem;margin-bottom:0">
+                <input type="checkbox" name="featured" id="featured-check" />
+                <label for="featured-check" style="margin:0;color:var(--text)">Marcar como proyecto destacado ⭐</label>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
 
-    <!-- ── EXPERIENCIA ── -->
-    <section id="section-experience" class="admin-section">
-      <div class="admin-section-header">
-        <h2>Experiencia</h2>
-        <button class="btn btn-primary" id="btn-add-experience">+ Agregar</button>
-      </div>
-      <div class="admin-card">
-        <div id="experience-list" class="cv-admin-list"></div>
-      </div>
-    </section>
+      <!-- ── EDUCACIÓN ── -->
+      <section id="section-education" class="admin-section">
+        <div class="section-header">
+          <h2>📚 Educación</h2>
+          <button class="btn btn-primary" id="btn-add-education">+ Agregar</button>
+        </div>
+        <div class="admin-card">
+          <div id="education-list" class="cv-admin-list"></div>
+        </div>
+      </section>
 
-    <!-- ── CERTIFICACIONES ── -->
-    <section id="section-certifications" class="admin-section">
-      <div class="admin-section-header">
-        <h2>Certificaciones</h2>
-        <button class="btn btn-primary" id="btn-add-certifications">+ Agregar</button>
-      </div>
-      <div class="admin-card">
-        <div id="certifications-list" class="cv-admin-list"></div>
-      </div>
-    </section>
+      <!-- ── EXPERIENCIA ── -->
+      <section id="section-experience" class="admin-section">
+        <div class="section-header">
+          <h2>💼 Experiencia</h2>
+          <button class="btn btn-primary" id="btn-add-experience">+ Agregar</button>
+        </div>
+        <div class="admin-card">
+          <div id="experience-list" class="cv-admin-list"></div>
+        </div>
+      </section>
 
-    <!-- ── SKILLS ── -->
-    <section id="section-skills" class="admin-section">
-      <div class="admin-section-header">
-        <h2>Skills</h2>
-        <button class="btn btn-primary" id="btn-add-skills">+ Agregar</button>
-      </div>
-      <div class="admin-card">
-        <div id="skills-list" class="cv-admin-list"></div>
-      </div>
-    </section>
+      <!-- ── CERTIFICACIONES ── -->
+      <section id="section-certifications" class="admin-section">
+        <div class="section-header">
+          <h2>🏆 Certificaciones</h2>
+          <button class="btn btn-primary" id="btn-add-certifications">+ Agregar</button>
+        </div>
+        <div class="admin-card">
+          <div id="certifications-list" class="cv-admin-list"></div>
+        </div>
+      </section>
 
-  </main>
+      <!-- ── SKILLS ── -->
+      <section id="section-skills" class="admin-section">
+        <div class="section-header">
+          <h2>⚡ Skills</h2>
+          <button class="btn btn-primary" id="btn-add-skills">+ Agregar</button>
+        </div>
+        <div class="admin-card">
+          <div id="skills-list" class="cv-admin-list"></div>
+        </div>
+      </section>
 
+    </main>
   </div><!-- /admin-wrapper -->
 
   <script type="module" src="../assets/js/admin.js"></script>
