@@ -1,38 +1,42 @@
-/* Wrapper oculto hasta verificar sesión */
-#admin-wrapper {
-  display: none;
-  width: 100%;
-  min-height: 100vh;
-}
-#admin-wrapper.visible {
-  display: flex;
-}
-
-/* assets/css/admin.css */
 /* ─────────────────────────────────────────────
    Estilos del panel de administración
    ───────────────────────────────────────────── */
 
+/* Body base — reset completo para el admin */
 .admin-body {
-  display: flex;
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
   background: var(--bg);
+  min-height: 100vh;
+  overflow: hidden; /* evita scroll en el body, cada panel maneja su propio scroll */
 }
-.admin-body::before { display: none; } /* sin noise en admin */
+.admin-body::before,
+.admin-body::after { display: none; } /* sin noise ni glow del portafolio */
+
+/* Wrapper oculto hasta verificar sesión */
+#admin-wrapper {
+  display: none;
+}
+#admin-wrapper.visible {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+}
 
 /* ── SIDEBAR ── */
 .admin-sidebar {
   width: 240px;
-  min-height: 100vh;
+  min-width: 240px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   background: var(--surface);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 1rem;
-  position: sticky;
-  top: 0;
-  height: 100vh;
   overflow-y: auto;
+  flex-shrink: 0;
 }
 .admin-logo {
   font-family: 'Space Mono', monospace;
@@ -64,9 +68,11 @@
 /* ── MAIN ── */
 .admin-main {
   flex: 1;
+  min-width: 0;
   padding: 2rem;
   overflow-y: auto;
-  max-width: 1000px;
+  height: 100vh;
+  overflow-x: hidden;
 }
 .admin-section { display: none; }
 .admin-section.active { display: block; }
